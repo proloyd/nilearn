@@ -50,6 +50,7 @@ def _get_connectome(adjacency_matrix, coords, threshold=None,
     if np.ndim(marker_size) > 0:
         marker_size = np.asarray(marker_size)
         marker_size = marker_size[path_nodes]
+    print(c)
     x, y, z = c.T
     for coord, cname in [(x, "x"), (y, "y"), (z, "z")]:
         connectome["_con_{}".format(cname)] = encode(
@@ -58,6 +59,32 @@ def _get_connectome(adjacency_matrix, coords, threshold=None,
     if hasattr(marker_size, 'tolist'):
         marker_size = marker_size.tolist()
     connectome['marker_size'] = marker_size
+
+    connectome['directional'] = not np.allclose(adjacency_matrix, adjacency_matrix.T)
+    if connectome['directional']:
+        start = coords[nodes[:, 0]]
+        end = coords[nodes[:, 1]]
+        mid = (start + 3*end) / 4
+        dir = (end - start)
+        dir_norm = ((dir * dir).sum(axis=1) ** 0.5)
+        non_zero = dir_norm > 0
+        mid = mid[non_zero, :]
+        dir = dir[non_zero, :]
+        dir_norm = dir_norm[non_zero]
+        dir = dir / dir_norm[:, None]
+        print(dir)
+        x, y, z = mid.T
+        u, v, w = dir.T
+        for coord, cname in [(x, "x"), (y, "y"), (z, "z")]:
+            connectome[f"_con_{cname}_mid"] = encode(
+                np.asarray(coord, dtype='<f4')
+            )
+        for coord, cname in [(u, "u"), (v, "v"), (w, "w2")]:
+            connectome[f"_con_{cname}"] = encode(
+                np.asarray(coord, dtype='<f4')
+            )
+        connectome["_con_w_dir"] = encode(np.asarray(s.data, dtype='<f4')[edges])
+
     return connectome
 
 

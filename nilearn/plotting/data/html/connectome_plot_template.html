@@ -90,7 +90,7 @@
                 }
             }
 
-            Plotly.plot('connectome-plot', [{
+            var trace1 = {
                 type: 'scatter3d',
                 mode: 'lines+markers',
                 x: info["con_x"],
@@ -112,7 +112,37 @@
                         [1, "#000000"]
                     ],
                 }
-            }]);
+            };
+
+            if (info["directional"]) {
+                for (let attribute of ["con_x_mid", "con_y_mid", "con_z_mid", "con_u", "con_v", "con_w2", "con_w_dir"]) {
+                    if (!(attribute in info)) {
+                        info[attribute] = Array.from(decodeBase64(
+                            info["_" + attribute], "float32"));
+                        }
+                    }
+                var trace2 = {
+                    type: 'cone',
+                    x: info["con_x_mid"],
+                    y: info["con_y_mid"],
+                    z: info["con_z_mid"],
+                    u: info["con_u"],
+                    v: info["con_v"],
+                    w: info["con_w2"],
+                    opacity: 1,
+                    sizeref: 0.2,
+                    color: info["con_w_dir"],
+                    colorscale: info["colorscale"],
+                    cmin: info["cmin"],
+                    cmax: info["cmax"],
+                    showscale: false,
+                };
+                var data = [trace1, trace2];
+            } else {
+                var data = [trace1];
+            }
+
+            Plotly.plot('connectome-plot', data);
 
         }
 
