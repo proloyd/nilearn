@@ -83,7 +83,8 @@ def _get_connectome(adjacency_matrix, coords, threshold=None,
             connectome[f"_con_{cname}"] = encode(
                 np.asarray(coord, dtype='<f4')
             )
-        connectome["_con_w_dir"] = encode(np.asarray(s.data, dtype='<f4')[edges])
+        # connectome["_con_w_dir"] = encode(np.asarray(s.data, dtype='<f4')[edges[non_zero]])
+        # import ipdb; ipdb.set_trace()
 
     return connectome
 

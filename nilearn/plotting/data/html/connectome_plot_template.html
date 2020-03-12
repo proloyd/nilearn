@@ -115,7 +115,7 @@
             };
 
             if (info["directional"]) {
-                for (let attribute of ["con_x_mid", "con_y_mid", "con_z_mid", "con_u", "con_v", "con_w2", "con_w_dir"]) {
+                for (let attribute of ["con_x_mid", "con_y_mid", "con_z_mid", "con_u", "con_v", "con_w2"]) {
                     if (!(attribute in info)) {
                         info[attribute] = Array.from(decodeBase64(
                             info["_" + attribute], "float32"));
@@ -130,11 +130,14 @@
                     v: info["con_v"],
                     w: info["con_w2"],
                     opacity: 1,
-                    sizeref: 0.2,
-                    color: info["con_w_dir"],
-                    colorscale: info["colorscale"],
-                    cmin: info["cmin"],
-                    cmax: info["cmax"],
+                    sizemode: 'scaled',
+                    sizeref: 0.5,
+                    colorscale: [
+                        [0, '#000000'],
+                        [1, "#000000"]
+                    ],
+                    // cmin: info["cmin"],
+                    // cmax: info["cmax"],
                     showscale: false,
                 };
                 var data = [trace1, trace2];
