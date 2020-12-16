@@ -50,7 +50,7 @@ def _get_connectome(adjacency_matrix, coords, threshold=None,
     if np.ndim(marker_size) > 0:
         marker_size = np.asarray(marker_size)
         marker_size = marker_size[path_nodes]
-    print(c)
+    # print(c)
     x, y, z = c.T
     for coord, cname in [(x, "x"), (y, "y"), (z, "z")]:
         connectome["_con_{}".format(cname)] = encode(
@@ -72,7 +72,7 @@ def _get_connectome(adjacency_matrix, coords, threshold=None,
         dir = dir[non_zero, :]
         dir_norm = dir_norm[non_zero]
         dir = dir / dir_norm[:, None]
-        print(dir)
+        # print(dir)
         x, y, z = mid.T
         u, v, w = dir.T
         for coord, cname in [(x, "x"), (y, "y"), (z, "z")]:
